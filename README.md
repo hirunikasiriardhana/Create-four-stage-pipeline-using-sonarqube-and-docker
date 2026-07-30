@@ -1,6 +1,8 @@
+Forked repo link: https://github.com/kasunkosala/devops-cicd.git
+
 # 🔍 SonarQube + Jenkins CI/CD Pipeline
 
-A step-by-step guide to connect **SonarQube** with **Jenkins** and run automated code quality analysis on every build — no prior DevOps wizardry required. ☕🔧
+A step-by-step guide to connect **SonarQube** with **Jenkins** and run automated code quality analysis on every build. ☕🔧
 
 ---
 
@@ -10,7 +12,7 @@ A step-by-step guide to connect **SonarQube** with **Jenkins** and run automated
 GitHub Repo ──▶ Jenkins Pipeline ──▶ Maven Build ──▶ SonarQube Analysis ──▶ 📊 Quality Report
 ```
 
-By the end of this guide, every push to the repo can be automatically checked for bugs, vulnerabilities, and code smells — with zero manual effort.
+By the end of this guide, every push to the repo can be automatically checked for bugs, vulnerabilities, and code smells with zero manual effort.
 
 ---
 
@@ -125,7 +127,7 @@ pipeline {
                 checkout scmGit(
                     branches: [[name: '*/master']],
                     extensions: [],
-                    userRemoteConfigs: [[url: 'https://github.com/<your-username>/<your-repo>']]
+                    userRemoteConfigs: [[url: 'https://github.com/hirunikasiriardhana/sonarqube-jenkins-docker-fullproject']]
                 )
             }
         }
@@ -140,35 +142,36 @@ pipeline {
         stage('Push') {
             steps {
                 echo 'Running SonarQube Scanner and pushing analysis...'
-                withSonarQubeEnv('SonarQube') {
+                withSonarQubeEnv('sonarqube-user-token') {
                     bat "mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar"
                 }
             }
         }
     }
 }
+
 ```
 
-> Replace `<your-username>/<your-repo>` with your actual GitHub repo URL, and make sure `withSonarQubeEnv('...')` matches the **Name** you set in Part 1, Step 4 (not the credential ID).
+> Replace `<username>/<repo>` with the actual GitHub repo URL, and make sure `withSonarQubeEnv('...')` matches the **Name** set in Part 1, Step 4 (not the credential ID).
 
 6. Click **Save**
 
 ### Step 4: Run It! 🎬
-1. Open your `sonarpipeline` job
+1. Open the `sonarpipeline` job
 2. Click **Build Now**
-3. Watch the **Console Output** — you should see all three stages pass:
+3. Watch the **Console Output** — All three stages pass:
    - ✅ Pull
    - ✅ Build
    - ✅ Push (SonarQube Analysis)
 
-### Step 5: Check Your Results
-Head back to your SonarQube dashboard and open your project — you'll see a full breakdown of bugs 🐛, vulnerabilities 🔓, and code smells 👃 detected in your codebase.
+### Step 5: Check the Results
+Head back to the SonarQube dashboard and open the project — I'll see a full breakdown of bugs 🐛, vulnerabilities 🔓, and code smells 👃 detected in my codebase.
 
 ---
 
 ## 🔁 Maintenance Note
 
-SonarQube tokens can expire depending on how they were created. If your pipeline suddenly fails with an **authentication error**:
+SonarQube tokens can expire depending on how they were created. If the pipeline suddenly fails with an **authentication error**:
 1. Go back to **Part 1, Step 2** and generate a fresh token
 2. Update the Jenkins credential's secret value (Part 1, Step 3) — no need to recreate the credential, just edit the value
 
@@ -187,7 +190,12 @@ If a real secret is ever pushed by mistake, **revoke/regenerate it immediately**
 
 ## 🎉 That's It!
 
-Now you have a self-checking pipeline: every build pulls your code, compiles it, and grades its code quality automatically. Happy shipping! 🚢
+Now I have a self-checking pipeline: every build pulls my code, compiles it, and grades its code quality automatically. Happy shipping! 🚢
 
 <img width="1917" height="870" alt="image" src="https://github.com/user-attachments/assets/cca74a71-04ba-4a86-9785-bdb584db0cd0" />
+
+Created Repository,
+
+<img width="1920" height="871" alt="image" src="https://github.com/user-attachments/assets/6de662b4-9eca-4899-bf24-ec07f0a86d33" />
+
 
